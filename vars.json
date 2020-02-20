@@ -1,0 +1,9 @@
+[
+{"ParameterKey":"cidrvpc","ParameterValue":"10.1.10.0/16"},
+{"ParameterKey":"cidrsubnet1","ParameterValue":"10.1.11.0/24"},
+{"ParameterKey":"cidrsubnet2","ParameterValue":"10.1.21.0/24"},
+{"ParameterKey":"cidrsubnet3","ParameterValue":"10.1.33.0/24"},
+{"ParameterKey":"region","ParameterValue":"us-east-1"}
+]
+
+
