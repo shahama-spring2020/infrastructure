@@ -15,3 +15,8 @@ aws cloudformation delete-stack --stack-name CSYE6225
 aws cloudformation update-stack --stack-name CSYE6225 --template-body file://infra.json --parameters file://vars.json
 
 add --profie while using aws cli
+
+
+## using bash script for cloudformation
+
+bash bashfile vpcname
