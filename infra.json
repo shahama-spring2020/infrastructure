@@ -29,13 +29,17 @@
     "VPC": {
       "Type": "AWS::EC2::VPC",
       "Properties": {
-        "CidrBlock": { "Ref" : "cidrvpc" },
+        "CidrBlock": {
+          "Ref": "cidrvpc"
+        },
         "EnableDnsSupport": true,
         "EnableDnsHostnames": true,
         "Tags": [
           {
             "Key": "Name",
-            "Value": { "Fn::Sub": "${AWS::StackName}-VPC1" },
+            "Value": {
+              "Fn::Sub": "${AWS::StackName}-VPC1"
+            }
           }
         ]
       }
@@ -47,21 +51,40 @@
     "AttachGateway": {
       "Type": "AWS::EC2::VPCGatewayAttachment",
       "Properties": {
-        "VpcId": { "Ref" : "VPC" },
-        "InternetGatewayId": { "Ref" : "InternetGateway" }
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "InternetGatewayId": {
+          "Ref": "InternetGateway"
+        }
       }
     },
     "PublicSubnet1": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
-        "VpcId": { "Ref" : "VPC" },
-        "AvailabilityZone": { "Fn::Select" : [ 0, {"Fn::GetAZs": { "Ref" : "region" } } ] },
-        "CidrBlock": { "Ref" : "cidrsubnet1" },
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": {
+                "Ref": "region"
+              }
+            }
+          ]
+        },
+        "CidrBlock": {
+          "Ref": "cidrsubnet1"
+        },
         "MapPublicIpOnLaunch": true,
         "Tags": [
           {
             "Key": "subnet1",
-            "Value": { "Fn::Sub": "${AWS::StackName}-Public-1" }
+            "Value": {
+              "Fn::Sub": "${AWS::StackName}-Public-1"
+            }
           }
         ]
       }
@@ -69,14 +92,29 @@
     "PublicSubnet2": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
-        "VpcId": { "Ref" : "VPC" },
-        "AvailabilityZone": { "Fn::Select" : [ 0, {"Fn::GetAZs": { "Ref" : "region" } } ] },
-        "CidrBlock": { "Ref" : "cidrsubnet2" },
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": {
+                "Ref": "region"
+              }
+            }
+          ]
+        },
+        "CidrBlock": {
+          "Ref": "cidrsubnet2"
+        },
         "MapPublicIpOnLaunch": true,
         "Tags": [
           {
             "Key": "subnet2",
-            "Value": { "Fn::Sub": "${AWS::StackName}-Public-2" }
+            "Value": {
+              "Fn::Sub": "${AWS::StackName}-Public-2"
+            }
           }
         ]
       }
@@ -84,14 +122,29 @@
     "PublicSubnet3": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
-        "VpcId": { "Ref" : "VPC" },
-        "AvailabilityZone": { "Fn::Select" : [ 0, {"Fn::GetAZs": { "Ref" : "region" } } ] },
-        "CidrBlock":{ "Ref" : "cidrsubnet3" },
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": {
+                "Ref": "region"
+              }
+            }
+          ]
+        },
+        "CidrBlock": {
+          "Ref": "cidrsubnet3"
+        },
         "MapPublicIpOnLaunch": true,
         "Tags": [
           {
             "Key": "subnet3",
-            "Value":  { "Fn::Sub": "${AWS::StackName}-Public-3" }
+            "Value": {
+              "Fn::Sub": "${AWS::StackName}-Public-3"
+            }
           }
         ]
       }
@@ -99,7 +152,9 @@
     "PublicRouteTable": {
       "Type": "AWS::EC2::RouteTable",
       "Properties": {
-        "VpcId": { "Ref" : "VPC" },
+        "VpcId": {
+          "Ref": "VPC"
+        },
         "Tags": [
           {
             "Key": "routetable",
@@ -112,32 +167,129 @@
       "Type": "AWS::EC2::Route",
       "DependsOn": "AttachGateway",
       "Properties": {
-        "RouteTableId":   { "Ref" : "PublicRouteTable" },
+        "RouteTableId": {
+          "Ref": "PublicRouteTable"
+        },
         "DestinationCidrBlock": "0.0.0.0/0",
-        "GatewayId":  { "Ref" : "InternetGateway" }
+        "GatewayId": {
+          "Ref": "InternetGateway"
+        }
       }
     },
     "PublicSubnet1RouteTableAssociation": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
-        "RouteTableId":  { "Ref" : "PublicRouteTable" },
-        "SubnetId": { "Ref" : "PublicSubnet1" }
+        "RouteTableId": {
+          "Ref": "PublicRouteTable"
+        },
+        "SubnetId": {
+          "Ref": "PublicSubnet1"
+        }
       }
     },
     "PublicSubnet2RouteTableAssociation": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
-        "RouteTableId": { "Ref" : "PublicRouteTable" },
-        "SubnetId": { "Ref" : "PublicSubnet2" }
+        "RouteTableId": {
+          "Ref": "PublicRouteTable"
+        },
+        "SubnetId": {
+          "Ref": "PublicSubnet2"
+        }
       }
     },
     "PublicSubnet3RouteTableAssociation": {
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
       "Properties": {
-        "RouteTableId": { "Ref" : "PublicRouteTable" },
-        "SubnetId": { "Ref" : "PublicSubnet3" }
+        "RouteTableId": {
+          "Ref": "PublicRouteTable"
+        },
+        "SubnetId": {
+          "Ref": "PublicSubnet3"
+        }
       }
-    }
+    },
+
+    "elbSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupName": {
+          "Ref": "elbSecurityGroupNameTag"
+        },
+        "GroupDescription": "Security tag for ELB",
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": 22,
+            "IpProtocol": "tcp",
+            "ToPort": 22
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": 5432,
+            "IpProtocol": "tcp",
+            "ToPort": 5432,
+
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": 8080,
+            "IpProtocol": "tcp",
+            "ToPort": 8080
+          }
+        ],
+        "VpcId": {
+          "Ref": "VPC"
+        }
+      }
+    },
+
+
+
+    "webServerSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupName": {
+          "Ref": "webServerSecurityGroupNameTag"
+        },
+        "GroupDescription": "Security tag for web server",
+        "SecurityGroupIngress": [
+          {
+            "SourceSecurityGroupId": {
+              "Ref": "elbSecurityGroup"
+            },
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 8080
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": 22,
+            "IpProtocol": "tcp",
+            "ToPort": 22
+          }
+        ],
+        "VpcId": {
+          "Ref": "myVPC"
+        }
+      }
+    },
+
+
+
+
+  }
   }
 
-}
