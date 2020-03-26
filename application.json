@@ -490,6 +490,9 @@
         "InstanceType": {
           "Ref": "InstanceTypeParameter"
         },
+
+
+        "LaunchConfigurationName": "EC2webapplication",
         "SecurityGroups": [
           {
             "Ref": "webServerSecurityGroup"
@@ -806,7 +809,7 @@
         "Scheme": "internet-facing",
         "Subnets": [{ "Ref": "webSubnet"   }, {"Ref": "webSubnet2" },{"Ref": "webSubnet3" }],
         "SecurityGroups":[{"Ref":"LoadBalancerSecurityGroup"}],
-        "Tags": [{"Key": "CSYE6225", "Value": "FALL2017" }],
+        "Tags": [{"Key": "Name", "Value": "CSYE_6225_AutoScaling" }],
         "Type": "application",
         "IpAddressType": "ipv4"
       }
@@ -838,6 +841,18 @@
             "Key": "deregistration_delay.timeout_seconds"
           }
         ],
+        "Name":{
+          "Fn::Join":[
+            "-",
+            [
+              {
+                "Ref":"AWS::StackName"
+              },
+              "TargetGroup"
+            ]
+          ]
+        },
+
         "Tags": [
           {
             "Key": "Name",
@@ -877,8 +892,8 @@
         }
         ],
         "Tags": [{
-          "Key": "NAME",
-          "Value": "CSYEAutoScalingGroup",
+          "Key": "Name",
+          "Value": "Ec2_instance",
           "PropagateAtLaunch" : "true"
         }],
         "VPCZoneIdentifier" :[{ "Ref": "webSubnet"   }, {"Ref": "webSubnet2" },{"Ref": "webSubnet3" }]
@@ -1173,15 +1188,34 @@
       "DeploymentGroupName": "csye6225-webapp-deployment",
       "DeploymentStyle": {
         "DeploymentType": "IN_PLACE",
-        "DeploymentOption": "WITHOUT_TRAFFIC_CONTROL"
+        "DeploymentOption": "WITH_TRAFFIC_CONTROL"
       },
+
+      "AutoScalingGroups": [
+        {
+          "Ref": "WebServerAutoscalingGroup"
+        }
+      ],
       "Ec2TagFilters": [
         {
           "Key": "Name",
-          "Value": "EC2webapplication",
+          "Value": "Ec2_instance",
           "Type": "KEY_AND_VALUE"
         }
       ],
+      "LoadBalancerInfo":{
+        "TargetGroupInfoList":[
+          {
+            "Name":{
+              "Fn::GetAtt":[
+                "ALBTargetGroup",
+                "TargetGroupName"
+              ]
+            }
+          }
+        ]
+      },
+
       "ServiceRoleArn": {
         "Fn::GetAtt": [
           "CodeDeployServiceRole",
