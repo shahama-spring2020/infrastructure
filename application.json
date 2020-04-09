@@ -48,9 +48,10 @@
     },
     "InstanceTypeParameter": {
       "Type": "String",
-      "Default": "t2.micro",
+      "Default": "t3.micro",
       "AllowedValues": [
         "t2.micro",
+        "t3.micro",
         "m1.small",
         "m1.large"
       ],
@@ -427,12 +428,6 @@
           },
           {
             "CidrIp": "0.0.0.0/0",
-            "FromPort": 22,
-            "IpProtocol": "tcp",
-            "ToPort": 22
-          },
-          {
-            "CidrIp": "0.0.0.0/0",
             "FromPort": 80,
             "IpProtocol": "tcp",
             "ToPort": 80
@@ -599,7 +594,7 @@
         "BackupRetentionPeriod": "0",
         "Engine": "postgres",
         "EngineVersion": "11.5",
-        "DBInstanceClass": "db.t2.micro",
+        "DBInstanceClass": "db.t3.micro",
         "MultiAZ": false,
         "DBInstanceIdentifier": "csye6225-spring2020",
         "MasterUsername": {
