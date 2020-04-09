@@ -20,3 +20,20 @@ add --profie while using aws cli
 ## using bash script for cloudformation
 
 bash bashfile vpcname
+
+
+    "RDSParameterGroup": {
+      "Type": "AWS::RDS::DBParameterGroup",
+      "Properties": {
+        "Family": "postgres11",
+        "Description": "postgres 11.5  DB Parameter Group",
+        "Parameters": {
+          "performance_schema": "1"
+        }
+      }
+    },
+    
+    
+      "DBParameterGroupName": {
+              "Ref": "RDSParameterGroup"
+            },
