@@ -123,8 +123,20 @@
     "DomainNameLambda": {
       "Type": "String",
       "Default": "prod.amanshah.xyz"
+    },
+
+    "SSLSECURITYGROUPTAG" : {
+    "Type": "String",
+      "Default": "SSLTagname"
+},
+
+    "SSLARN": {
+      "Type": "String",
+      "Default" : "arn:aws:acm:us-east-1:719133250724:certificate/dfddb2cf-f823-4ed5-89dd-331314f843d4"
     }
   },
+
+
   "Resources": {
     "myVPC": {
       "Type": "AWS::EC2::VPC",
@@ -471,6 +483,31 @@
         }
       }
     },
+
+    "SSLSECURITYGROUP": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupName": {
+          "Ref": "SSLSECURITYGROUPTAG"
+        },
+        "GroupDescription": "Security tag for web server",
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443
+          }
+        ],
+        "VpcId": {
+          "Ref": "myVPC"
+        }
+      }
+    },
+
+
+
+
     "EC2InstanceAutoscaled": {
       "Type": "AWS::AutoScaling::LaunchConfiguration",
       "Properties": {
@@ -598,8 +635,8 @@
         "AllocatedStorage": "8",
         "BackupRetentionPeriod": "0",
         "Engine": "postgres",
-        "EngineVersion": "11.5",
-        "DBInstanceClass": "db.t2.micro",
+        "EngineVersion": "10.11",
+        "DBInstanceClass": "db.t3.micro",
         "MultiAZ": false,
         "DBInstanceIdentifier": "csye6225-spring2020",
         "MasterUsername": {
@@ -611,6 +648,11 @@
         "DBSubnetGroupName": {
           "Ref": "myDBSubnetGroup"
         },
+
+        "StorageEncrypted": true,
+        "DBParameterGroupName": {
+          "Ref": "RDSParameterGroup"
+        },
         "PubliclyAccessible": false,
         "VPCSecurityGroups": [
           {
@@ -619,6 +661,27 @@
         ]
       }
     },
+
+
+    "RDSParameterGroup": {
+      "Type": "AWS::RDS::DBParameterGroup",
+      "Properties": {
+        "Family": "postgres10",
+        "Description": "postgres 10  DB Parameter Group",
+
+        "Parameters": {
+          "rds.force_ssl": "1"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "rdsparametergroup"
+          }
+        ]
+      }
+    },
+
+
     "S3bucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
@@ -808,7 +871,7 @@
         ],
         "SecurityGroups": [
           {
-            "Ref": "LoadBalancerSecurityGroup"
+            "Ref": "SSLSECURITYGROUP"
           }
         ],
         "Tags": [
@@ -876,8 +939,16 @@
         "LoadBalancerArn": {
           "Ref": "LoadBalancer"
         },
-        "Port": "80",
-        "Protocol": "HTTP"
+
+        "Port": "443",
+        "Protocol": "HTTPS",
+        "Certificates": [
+          {
+            "CertificateArn": {
+              "Ref": "SSLARN"
+            }
+          }
+        ]
       }
     },
     "WebServerAutoscalingGroup": {
